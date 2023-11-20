@@ -7,6 +7,8 @@ namespace Animation_Summative
 {
     public class Game1 : Game
     {
+        double introTime; // When user switches to battle screen, save current time elapsed to time animations
+
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         Texture2D spaceTexture;
@@ -19,7 +21,8 @@ namespace Animation_Summative
         Rectangle tieFighterRect;
         Rectangle blastRect;
         Vector2 spaceSpeed;
-        float time;
+        float timeTotal;
+        float timeInIntro;
 
         enum Screen
         {
@@ -66,7 +69,8 @@ namespace Animation_Summative
 
         protected override void Update(GameTime gameTime)
         {
-            time = (float)gameTime.TotalGameTime.TotalSeconds;
+
+            timeTotal = (float)gameTime.TotalGameTime.TotalSeconds;
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
