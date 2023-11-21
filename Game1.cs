@@ -9,6 +9,7 @@ namespace Animation_Summative
     public class Game1 : Game
     {
         double introTime; // When user switches to battle screen, save current time elapsed to time animations
+        bool tie1, tie2, tieExploded1, tieExploded2;
         bool redBlast1, redBlast2, greenBlast1, greenBlast2;
 
         private GraphicsDeviceManager graphics;
@@ -20,11 +21,12 @@ namespace Animation_Summative
         Texture2D explosionTexture;
         Rectangle space1Rect, space2Rect;
         Rectangle xWingRect;
-        Rectangle tieFighterRect;
+        Rectangle tieFighterRect1, tieFighterRect2;
         Rectangle redBlastRect1, redBlastRect2, greenBlastRect1, greenBlastRect2;
         Vector2 spaceSpeed;
         Vector2 xWingSpeed;
-        Vector2 tieSpeed;
+        Vector2 tieSpeed1;
+        Vector2 tieSpeed2;
         Vector2 redBlastSpeed1, redBlastSpeed2, greenBlastSpeed1, greenBlastSpeed2;
         float runTime;
         float timeTotal;
@@ -57,18 +59,24 @@ namespace Animation_Summative
             redBlast2 = false;
             greenBlast1 = false;
             greenBlast2 = false;
+            tie1 = false;
+            tieExploded1 = false;
+            tie2 = false;
+            tieExploded2 = false;
 
             space1Rect = new Rectangle(0, 0, 800, 600);
             space2Rect = new Rectangle(0, -600, 800, 600);
             xWingRect = new Rectangle(350, 475, 100, 100);
-            tieFighterRect = new Rectangle(0, 0, 100, 100);
+            tieFighterRect1 = new Rectangle(0, 0, 100, 100);
+            tieFighterRect2 = new Rectangle(0, 0, 100, 100);
             redBlastRect1 = new Rectangle(650, 500, 15, 35);
             redBlastRect2 = new Rectangle(0, 0, 15, 35);
             greenBlastRect1 = new Rectangle(0, 0, 15, 35);
             greenBlastRect2 = new Rectangle(0, 0, 15, 35);
             spaceSpeed = new Vector2(0, 2);
             xWingSpeed = new Vector2(0, 0);
-            tieSpeed = new Vector2(0, 0);
+            tieSpeed1 = new Vector2(0, 2);
+            tieSpeed2 = new Vector2(0, 0);
             redBlastSpeed1 = new Vector2(0, -4);
 
 
@@ -118,10 +126,9 @@ namespace Animation_Summative
                 }
 
 
-
-
                 // Changing speeds and adding effects based on time
 
+                //X-Wing
                 if (timeTotal >= 5 && timeTotal < 9)
                 {
                     xWingSpeed.X = 1;
@@ -131,6 +138,14 @@ namespace Animation_Summative
                     xWingSpeed.X = 0;
                 }
 
+                // Ties
+                if (Math.Round(timeTotal) == 3)
+                {
+                    tie1 = true;
+                }
+
+
+                // Blasts
                 if ( Math.Round(timeTotal) == 9 )
                 {
                     redBlast1 = true;
@@ -176,6 +191,21 @@ namespace Animation_Summative
                 spriteBatch.Draw(spaceTexture, space1Rect, Color.White);
                 spriteBatch.Draw(spaceTexture, space2Rect, Color.White);
                 spriteBatch.Draw(xWingTexture, xWingRect, Color.White);
+
+                if (tie1 && !tieExploded1)
+                {
+                    spriteBatch.Draw(tieFighterTexture, tieFighterRect1, Color.White);
+                }
+                else if (tie1 && tieExploded1)
+                {
+
+                }
+
+                if (tie2 && !tieExploded2)
+                {
+
+                }
+                else if (tie2 && tieExploded2)
 
                 if (redBlast1 == true)
                 {
