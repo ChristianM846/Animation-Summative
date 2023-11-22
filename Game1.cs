@@ -67,17 +67,20 @@ namespace Animation_Summative
             space1Rect = new Rectangle(0, 0, 800, 600);
             space2Rect = new Rectangle(0, -600, 800, 600);
             xWingRect = new Rectangle(350, 475, 100, 100);
-            tieFighterRect1 = new Rectangle(0, 0, 100, 100);
+            tieFighterRect1 = new Rectangle(350, -150, 100, 100);
             tieFighterRect2 = new Rectangle(0, 0, 100, 100);
-            redBlastRect1 = new Rectangle(650, 500, 15, 35);
+            redBlastRect1 = new Rectangle(628, 500, 15, 35);
             redBlastRect2 = new Rectangle(0, 0, 15, 35);
-            greenBlastRect1 = new Rectangle(0, 0, 15, 35);
+            greenBlastRect1 = new Rectangle(392, 200, 15, 35);
             greenBlastRect2 = new Rectangle(0, 0, 15, 35);
             spaceSpeed = new Vector2(0, 2);
             xWingSpeed = new Vector2(0, 0);
             tieSpeed1 = new Vector2(0, 2);
             tieSpeed2 = new Vector2(0, 0);
-            redBlastSpeed1 = new Vector2(0, -4);
+            redBlastSpeed1 = new Vector2(0,-4);
+            redBlastSpeed2 = new Vector2(0,-4);
+            greenBlastSpeed1 = new Vector2(0,4);
+            greenBlastSpeed2 = new Vector2(0,4);
 
 
             base.Initialize();
@@ -129,7 +132,7 @@ namespace Animation_Summative
                 // Changing speeds and adding effects based on time
 
                 //X-Wing
-                if (timeTotal >= 5 && timeTotal < 9)
+                if (timeTotal >= 4 && timeTotal < 9)
                 {
                     xWingSpeed.X = 1;
                 }
@@ -138,14 +141,41 @@ namespace Animation_Summative
                     xWingSpeed.X = 0;
                 }
 
-                // Ties
+                //Ties
                 if (Math.Round(timeTotal) == 3)
                 {
                     tie1 = true;
                 }
 
+                if (Math.Round(timeTotal) == 5)
+                {
+                    tieSpeed1.Y = 0;
+                }
+
+                if (Math.Round(timeTotal) == 7)
+                {
+                    tieSpeed1.X = 1;
+                }
+
+                if (tieFighterRect1.Center.Y == redBlastRect1.Y)
+                {
+                    redBlast1 = false;
+                    tieExploded1 = true;
+                    tieSpeed1.X = 0;
+                }
+
+                if (Math.Round(timeTotal) == 13)
+                {
+                    tie1 = false;
+                }
 
                 // Blasts
+
+                if (Math.Round(timeTotal) == 5)
+                {
+                    greenBlast1 = true;
+                }
+
                 if ( Math.Round(timeTotal) == 9 )
                 {
                     redBlast1 = true;
@@ -156,7 +186,13 @@ namespace Animation_Summative
                 xWingRect.X += (int)xWingSpeed.X;
                 xWingRect.Y += (int)xWingSpeed.Y;
 
-                if (redBlast1)
+                if (tie1 && !tieExploded1)
+                {
+                    tieFighterRect1.X += (int)tieSpeed1.X;
+                    tieFighterRect1.Y += (int)tieSpeed1.Y;
+                }
+
+                if (redBlast1 == true)
                 {
                     redBlastRect1.Y += (int)redBlastSpeed1.Y;
                 }
@@ -198,7 +234,7 @@ namespace Animation_Summative
                 }
                 else if (tie1 && tieExploded1)
                 {
-
+                    spriteBatch.Draw(explosionTexture, tieFighterRect1, Color.White);
                 }
 
                 if (tie2 && !tieExploded2)
@@ -206,20 +242,23 @@ namespace Animation_Summative
 
                 }
                 else if (tie2 && tieExploded2)
+                {
 
-                if (redBlast1 == true)
+                }
+
+                if (redBlast1)
                 {
                     spriteBatch.Draw(blastTexture, redBlastRect1, Color.Red);
                 }
-                if (redBlast2 == true)
+                if (redBlast2)
                 {
 
                 }
-                if (greenBlast1 == true)
+                if (greenBlast1)
                 {
-
+                    spriteBatch.Draw(blastTexture, greenBlastRect1, Color.Green);
                 }
-                if (greenBlast2 == true)
+                if (greenBlast2)
                 {
 
                 }
