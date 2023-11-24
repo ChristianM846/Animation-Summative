@@ -74,7 +74,7 @@ namespace Animation_Summative
             spaceSpeed = new Vector2(0, 2);
             xWingSpeed = new Vector2(0, 0);
             tieSpeed1 = new Vector2(0, 2);
-            tieSpeed2 = new Vector2(0, 0);
+            tieSpeed2 = new Vector2(0, 2);
             redBlastSpeed = new Vector2(0,-4);
             greenBlastSpeed1 = new Vector2(0,4);
             greenBlastSpeed2 = new Vector2(0,4);
@@ -146,7 +146,19 @@ namespace Animation_Summative
                 {
                     xWingSpeed.X = 1;
                 }
-                else if (timeTotal > 20)
+                else if (Math.Round(timeTotal) == 20)
+                {
+                    xWingSpeed.X = 0;
+                }
+                else if (Math.Round(timeTotal) == 25)
+                {
+                    xWingSpeed.X = 1;
+                }
+                else if (Math.Round(timeTotal) == 26)
+                {
+                    xWingSpeed.X = -1;
+                }
+                else if(Math.Round(timeTotal) == 27)
                 {
                     xWingSpeed.X = 0;
                 }
@@ -165,12 +177,13 @@ namespace Animation_Summative
                     tieSpeed1.X = 1;
                 }
 
-                if (tieFighterRect1.Center.Y == redBlastRect.Y)
+                if (tieFighterRect1.Center.Y == redBlastRect.Top && !tie2)
                 {
                     redBlast = false;
                     redBlastRect.Y = 500;
                     tieExploded1 = true;
                     tieSpeed1.X = 0;
+                    tieSpeed1.Y = 0;
                 }
 
                 if (Math.Round(timeTotal) == 13)
@@ -189,8 +202,40 @@ namespace Animation_Summative
                 {
                     tie1 = false;
                 }
+                else if (Math.Round(timeTotal) == 23)
+                {
+                    tieFighterRect1.X = 500;
+                    tieFighterRect1.Y = -100;
+                    tieFighterRect2.X = 200;
+                    tieFighterRect2.Y = -100;
+                    tie1 = true;
+                    tieExploded1 = false;
+                    tie2 = true;
+                }
+                else if (Math.Round(timeTotal) == 26)
+                {
+                    tieSpeed1.Y = 0;
+                    tieSpeed2.Y = 0;
+                }
+                else if (Math.Round(timeTotal) == 27)
+                {
+                    tieSpeed1.X = -1;
+                    tieSpeed2.X = 1;
+                }
 
-               
+               if (tieFighterRect1.Center.Y == redBlastRect.Y && tie2)
+               {
+                    redBlast = false;
+                    redBlastRect.Y = 500;
+                    tieExploded1 = true;
+                    tieSpeed1.X = -1;
+               }
+
+               if (tieFighterRect1.Left == tieFighterRect2.Center.X && !tieExploded2)
+               {
+                    tieExploded2 = true;
+                    tieSpeed2.X = 0;
+               }
 
                 // Blasts
 
@@ -216,13 +261,27 @@ namespace Animation_Summative
                     greenBlastRect1.Y = 175;
                     greenBlast1 = true;
                 }
+                else if (Math.Round(timeTotal) == 26)
+                {
+                    redBlast = true;
+                    redBlastRect.X = 495;
+                }
+                else if (Math.Round(timeTotal) == 27 && !greenBlast2)
+                {
+                    greenBlastRect1.X = 500;
+                    greenBlastRect1.Y = 200;
+                    greenBlastRect2.X = 250;
+                    greenBlastRect2.Y = 200;
+                    greenBlast1 = true;
+                    greenBlast2 = true;
+                }
                     
                 // Applying speeds
 
                 xWingRect.X += (int)xWingSpeed.X;
                 xWingRect.Y += (int)xWingSpeed.Y;
 
-                if (tie1 && !tieExploded1)
+                if (tie1)
                 {
                     tieFighterRect1.X += (int)tieSpeed1.X;
                     tieFighterRect1.Y += (int)tieSpeed1.Y;
@@ -277,11 +336,11 @@ namespace Animation_Summative
 
                 if (tie2 && !tieExploded2)
                 {
-
+                    spriteBatch.Draw(tieFighterTexture, tieFighterRect2, Color.White);
                 }
                 else if (tie2 && tieExploded2)
                 {
-
+                    spriteBatch.Draw(explosionTexture, tieFighterRect2, Color.White);
                 }
 
                 if (redBlast)
@@ -294,7 +353,7 @@ namespace Animation_Summative
                 }
                 if (greenBlast2)
                 {
-
+                    spriteBatch.Draw(blastTexture, greenBlastRect2, Color.Green);
                 }
 
             }
