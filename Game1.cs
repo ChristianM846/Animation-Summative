@@ -201,6 +201,7 @@ namespace Animation_Summative
                 else if (Math.Round(timeTotal) == 21)
                 {
                     tie1 = false;
+                    tieExploded1 = false;
                 }
                 else if (Math.Round(timeTotal) == 23)
                 {
