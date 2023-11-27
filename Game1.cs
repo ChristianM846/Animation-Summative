@@ -28,6 +28,8 @@ namespace Animation_Summative
         Vector2 tieSpeed1;
         Vector2 tieSpeed2;
         Vector2 redBlastSpeed, greenBlastSpeed1, greenBlastSpeed2;
+        SpriteFont introFont;
+        SpriteFont endingFont;
         float runTime;
         float timeTotal;
         float timeInIntro;
@@ -53,7 +55,7 @@ namespace Animation_Summative
 
         protected override void Initialize()
         {
-            screen = Screen.Battle;
+            screen = Screen.End; // For Testing
 
             redBlast = false;
             greenBlast1 = false;
@@ -91,6 +93,8 @@ namespace Animation_Summative
             xWingTexture = Content.Load<Texture2D>("X-Wing");
             blastTexture = Content.Load<Texture2D>("rectangle");
             explosionTexture = Content.Load<Texture2D>("PixelBoom");
+            introFont = Content.Load<SpriteFont>("IntroText");
+            endingFont = Content.Load<SpriteFont>("Ending");
 
         }
 
@@ -118,12 +122,22 @@ namespace Animation_Summative
                     space2Rect.Y = -600;
                 }
 
-                // Checking if Blasts collide or leave
+                // Checking if Blasts leave screen
 
                 if (redBlastRect.Bottom == 0)
                 {
                     redBlast = false;
                     redBlastRect.Y = 500;
+                }
+
+                if (greenBlastRect1.Top == graphics.PreferredBackBufferHeight)
+                {
+                    greenBlast1 = false;
+                }
+
+                if (greenBlastRect2.Top == graphics.PreferredBackBufferHeight)
+                {
+                    greenBlast2 = false;
                 }
 
 
@@ -146,7 +160,7 @@ namespace Animation_Summative
                 {
                     xWingSpeed.X = 1;
                 }
-                else if (Math.Round(timeTotal) == 20)
+                else if (Math.Round(timeTotal) == 20) // I changed methods for checking time here because these ones didn't look right otherwise
                 {
                     xWingSpeed.X = 0;
                 }
@@ -158,9 +172,18 @@ namespace Animation_Summative
                 {
                     xWingSpeed.X = -1;
                 }
-                else if(Math.Round(timeTotal) == 27)
+                else if (Math.Round(timeTotal) == 27)
                 {
                     xWingSpeed.X = 0;
+                }
+                else if (Math.Round(timeTotal) == 32)
+                {
+                    xWingSpeed.Y = -2;
+                }
+
+                if (xWingRect.Bottom <= -20)
+                {
+                    screen = Screen.End;
                 }
 
                 //Ties
@@ -211,6 +234,7 @@ namespace Animation_Summative
                     tieFighterRect2.Y = -100;
                     tie1 = true;
                     tieExploded1 = false;
+                    tieSpeed1.Y = 2;
                     tie2 = true;
                 }
                 else if (Math.Round(timeTotal) == 26)
@@ -236,7 +260,14 @@ namespace Animation_Summative
                {
                     tieExploded2 = true;
                     tieSpeed2.X = 0;
+                    tieSpeed1.X = 0;
                }
+
+               if (Math.Round(timeTotal) == 31)
+                {
+                    tie1 = false;
+                    tie2 = false;
+                }
 
                 // Blasts
 
@@ -244,13 +275,7 @@ namespace Animation_Summative
                 {
                     greenBlast1 = true;
                 }
-
-                if (greenBlastRect1.Top == graphics.PreferredBackBufferHeight)
-                {
-                    greenBlast1 = false;
-                }
-
-                if ( Math.Round(timeTotal) == 9 )
+                else if ( Math.Round(timeTotal) == 9 )
                 {
                     redBlast = true;
                 }
@@ -276,7 +301,7 @@ namespace Animation_Summative
                     greenBlast1 = true;
                     greenBlast2 = true;
                 }
-                    
+
                 // Applying speeds
 
                 xWingRect.X += (int)xWingSpeed.X;
@@ -360,7 +385,13 @@ namespace Animation_Summative
             }
             else if (screen == Screen.End)
             {
-
+                spriteBatch.Draw(spaceTexture, new Rectangle(0, 0, 800, 600), Color.White);
+                spriteBatch.DrawString(endingFont, "Having eliminated the", new Vector2(180, 50), Color.Yellow);
+                spriteBatch.DrawString(endingFont, "opposing squadron,", new Vector2(200, 125), Color.Yellow);
+                spriteBatch.DrawString(endingFont, "Luke continous to race", new Vector2(180, 200), Color.Yellow);
+                spriteBatch.DrawString(endingFont, "to Bespin, in hopes to", new Vector2(180, 275), Color.Yellow);
+                spriteBatch.DrawString(endingFont, "save his friends,", new Vector2(240, 350), Color.Yellow);
+                spriteBatch.DrawString(endingFont, "before it is too late.", new Vector2(200, 425), Color.Yellow);
             }
 
             spriteBatch.End();
