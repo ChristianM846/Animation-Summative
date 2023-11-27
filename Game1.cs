@@ -8,6 +8,8 @@ namespace Animation_Summative
 {
     public class Game1 : Game
     {
+        int introTextY;
+        int endingTextY;
         double introTime; // When user switches to battle screen, save current time elapsed to time animations
         bool tie1, tie2, tieExploded1, tieExploded2;
         bool redBlast,greenBlast1, greenBlast2;
@@ -87,6 +89,8 @@ namespace Animation_Summative
 
         protected override void LoadContent()
         {
+            introTextY = graphics.PreferredBackBufferHeight;
+            endingTextY = graphics.PreferredBackBufferHeight;
             spriteBatch = new SpriteBatch(GraphicsDevice);
             spaceTexture = Content.Load<Texture2D>("Space");
             tieFighterTexture = Content.Load<Texture2D>("Tie");
@@ -333,6 +337,10 @@ namespace Animation_Summative
                 }
 
             }
+            else if (screen == Screen.End)
+            {
+                endingTextY -= 1;
+            }
 
             base.Update(gameTime);
         }
@@ -386,12 +394,12 @@ namespace Animation_Summative
             else if (screen == Screen.End)
             {
                 spriteBatch.Draw(spaceTexture, new Rectangle(0, 0, 800, 600), Color.White);
-                spriteBatch.DrawString(endingFont, "Having eliminated the", new Vector2(180, 50), Color.Yellow);
-                spriteBatch.DrawString(endingFont, "opposing squadron,", new Vector2(200, 125), Color.Yellow);
-                spriteBatch.DrawString(endingFont, "Luke continous to race", new Vector2(180, 200), Color.Yellow);
-                spriteBatch.DrawString(endingFont, "to Bespin, in hopes to", new Vector2(180, 275), Color.Yellow);
-                spriteBatch.DrawString(endingFont, "save his friends,", new Vector2(240, 350), Color.Yellow);
-                spriteBatch.DrawString(endingFont, "before it is too late.", new Vector2(200, 425), Color.Yellow);
+                spriteBatch.DrawString(endingFont, "Having eliminated the", new Vector2(180, endingTextY), Color.Yellow);
+                spriteBatch.DrawString(endingFont, "opposing squadron,", new Vector2(200, endingTextY + 75), Color.Yellow);
+                spriteBatch.DrawString(endingFont, "Luke continous to race", new Vector2(180, endingTextY + 150), Color.Yellow);
+                spriteBatch.DrawString(endingFont, "to Bespin, in hopes to", new Vector2(180, endingTextY + 225), Color.Yellow);
+                spriteBatch.DrawString(endingFont, "save his friends,", new Vector2(240, endingTextY + 300), Color.Yellow);
+                spriteBatch.DrawString(endingFont, "before it is too late.", new Vector2(200, endingTextY + 375), Color.Yellow);
             }
 
             spriteBatch.End();
