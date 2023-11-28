@@ -21,10 +21,14 @@ namespace Animation_Summative
         Texture2D tieFighterTexture;
         Texture2D blastTexture;
         Texture2D explosionTexture;
+        Texture2D lukeTexture;
+        Texture2D vaderTexture;
         Rectangle space1Rect, space2Rect;
         Rectangle xWingRect;
         Rectangle tieFighterRect1, tieFighterRect2;
         Rectangle redBlastRect, greenBlastRect1, greenBlastRect2;
+        Rectangle lukeRect;
+        Rectangle vaderRect;
         Vector2 spaceSpeed;
         Vector2 xWingSpeed;
         Vector2 tieSpeed1;
@@ -32,6 +36,7 @@ namespace Animation_Summative
         Vector2 redBlastSpeed, greenBlastSpeed1, greenBlastSpeed2;
         SpriteFont introFont;
         SpriteFont endingFont;
+        SpriteFont instructionFont;
         float runTime;
         float timeTotal;
         float timeInIntro;
@@ -57,7 +62,7 @@ namespace Animation_Summative
 
         protected override void Initialize()
         {
-            screen = Screen.End; // For Testing
+            screen = Screen.Intro; // For Testing
 
             redBlast = false;
             greenBlast1 = false;
@@ -75,6 +80,8 @@ namespace Animation_Summative
             redBlastRect = new Rectangle(628, 500, 15, 35);
             greenBlastRect1 = new Rectangle(392, 200, 15, 35);
             greenBlastRect2 = new Rectangle(0, 0, 15, 35);
+            lukeRect = new Rectangle(0, 50, 150, 500);
+            vaderRect = new Rectangle(650, 50, 150, 500);
             spaceSpeed = new Vector2(0, 2);
             xWingSpeed = new Vector2(0, 0);
             tieSpeed1 = new Vector2(0, 2);
@@ -82,6 +89,7 @@ namespace Animation_Summative
             redBlastSpeed = new Vector2(0,-4);
             greenBlastSpeed1 = new Vector2(0,4);
             greenBlastSpeed2 = new Vector2(0,4);
+            
 
 
             base.Initialize();
@@ -97,8 +105,11 @@ namespace Animation_Summative
             xWingTexture = Content.Load<Texture2D>("X-Wing");
             blastTexture = Content.Load<Texture2D>("rectangle");
             explosionTexture = Content.Load<Texture2D>("PixelBoom");
+            lukeTexture = Content.Load<Texture2D>("Luke");
+            vaderTexture = Content.Load<Texture2D>("Vader");
             introFont = Content.Load<SpriteFont>("IntroText");
             endingFont = Content.Load<SpriteFont>("Ending");
+            instructionFont = Content.Load<SpriteFont>("Instruction");
 
         }
 
@@ -109,7 +120,11 @@ namespace Animation_Summative
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            if (screen == Screen.Battle)
+            if (screen == Screen.Intro)
+            {
+                introTextY -= 1;
+            }
+            else if (screen == Screen.Battle)
             {
                 timeInIntro = 0;
                 timeTotal = runTime - timeInIntro;
@@ -340,6 +355,11 @@ namespace Animation_Summative
             else if (screen == Screen.End)
             {
                 endingTextY -= 1;
+
+                if (endingTextY <= -450)
+                {
+                    Exit();
+                }
             }
 
             base.Update(gameTime);
@@ -351,6 +371,18 @@ namespace Animation_Summative
             spriteBatch.Begin();
             if (screen == Screen.Intro)
             {
+                spriteBatch.Draw(spaceTexture, new Rectangle(0, 0, 800, 600), Color.White);
+                spriteBatch.Draw(lukeTexture, lukeRect, Color.White);
+                spriteBatch.Draw(vaderTexture, vaderRect, Color.White);
+                spriteBatch.DrawString(introFont, "As Luke Skywalker", new Vector2(200, introTextY), Color.Yellow);
+                spriteBatch.DrawString(introFont, "trains with Jedi", new Vector2(240, introTextY + 75), Color.Yellow);
+                spriteBatch.DrawString(introFont, "Master Yoda on the", new Vector2(190, introTextY + 150), Color.Yellow);
+                spriteBatch.DrawString(introFont, "remote planet of", new Vector2(215, introTextY + 225), Color.Yellow);
+                spriteBatch.DrawString(introFont, "Dagobah, he suddenly", new Vector2(165, introTextY + 300), Color.Yellow);
+                spriteBatch.DrawString(introFont, "has a force vision:", new Vector2(200, introTextY + 375), Color.Yellow);
+                spriteBatch.DrawString(introFont, "His friends are in", new Vector2(205, introTextY + 450), Color.Yellow);
+                spriteBatch.DrawString(introFont, "grave danger on the", new Vector2(180, introTextY + 525), Color.Yellow);
+                spriteBatch.DrawString(introFont, "planet Bespin!", new Vector2(240, introTextY + 600), Color.Yellow);
 
             }
             else if (screen == Screen.Battle)
@@ -400,6 +432,8 @@ namespace Animation_Summative
                 spriteBatch.DrawString(endingFont, "to Bespin, in hopes to", new Vector2(180, endingTextY + 225), Color.Yellow);
                 spriteBatch.DrawString(endingFont, "save his friends,", new Vector2(240, endingTextY + 300), Color.Yellow);
                 spriteBatch.DrawString(endingFont, "before it is too late.", new Vector2(200, endingTextY + 375), Color.Yellow);
+                spriteBatch.Draw(lukeTexture, lukeRect, Color.White);
+                spriteBatch.Draw(vaderTexture, vaderRect, Color.White);
             }
 
             spriteBatch.End();
