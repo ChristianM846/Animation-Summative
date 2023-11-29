@@ -94,6 +94,18 @@
 /processorParam:TextureFormat=Color
 /build:Tie.png
 
+#begin TieBlast.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:TieBlast.wav
+
+#begin TieExplosion.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:TieExplosion.wav
+
 #begin Vader.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -117,4 +129,10 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:X-Wing.png
+
+#begin X-WingBlast.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:X-WingBlast.wav
 

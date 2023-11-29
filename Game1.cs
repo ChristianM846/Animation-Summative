@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -10,7 +11,6 @@ namespace Animation_Summative
     {
         int introTextY;
         int endingTextY;
-        double introTime; // When user switches to battle screen, save current time elapsed to time animations
         bool tie1, tie2, tieExploded1, tieExploded2;
         bool redBlast,greenBlast1, greenBlast2;
 
@@ -37,9 +37,11 @@ namespace Animation_Summative
         SpriteFont introFont;
         SpriteFont endingFont;
         SpriteFont instructionFont;
+        SoundEffect xWingBlast, TieBlast, TieExplosion; 
+        MouseState mousestate;
         float runTime;
         float timeTotal;
-        float timeInIntro;
+        float introTime;
 
         enum Screen
         {
@@ -110,6 +112,9 @@ namespace Animation_Summative
             introFont = Content.Load<SpriteFont>("IntroText");
             endingFont = Content.Load<SpriteFont>("Ending");
             instructionFont = Content.Load<SpriteFont>("Instruction");
+            xWingBlast = Content.Load<SoundEffect>("X-WingBlast");
+            TieBlast = Content.Load<SoundEffect>("TieBlast");
+            TieExplosion = Content.Load<SoundEffect>("TieExplosion");
 
         }
 
@@ -117,17 +122,25 @@ namespace Animation_Summative
         {
 
             runTime = (float)gameTime.TotalGameTime.TotalSeconds;
+            mousestate = Mouse.GetState();
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             if (screen == Screen.Intro)
             {
+
+                if (mousestate.LeftButton == ButtonState.Pressed || introTextY <= -1220)
+                {
+                    introTime = runTime;
+                    screen = Screen.Battle;
+                }
                 introTextY -= 1;
             }
             else if (screen == Screen.Battle)
             {
-                timeInIntro = 0;
-                timeTotal = runTime - timeInIntro;
+                timeTotal = runTime - introTime;
+
+                
 
                 space1Rect.Y += (int)spaceSpeed.Y;
                 if (space1Rect.Top >= graphics.PreferredBackBufferHeight)
@@ -226,6 +239,7 @@ namespace Animation_Summative
                     tieExploded1 = true;
                     tieSpeed1.X = 0;
                     tieSpeed1.Y = 0;
+                    TieExplosion.Play();
                 }
 
                 if (Math.Round(timeTotal) == 13)
@@ -273,6 +287,7 @@ namespace Animation_Summative
                     redBlastRect.Y = 500;
                     tieExploded1 = true;
                     tieSpeed1.X = -1;
+                    TieExplosion.Play();
                }
 
                if (tieFighterRect1.Left == tieFighterRect2.Center.X && !tieExploded2)
@@ -280,6 +295,7 @@ namespace Animation_Summative
                     tieExploded2 = true;
                     tieSpeed2.X = 0;
                     tieSpeed1.X = 0;
+                    TieExplosion.Play();
                }
 
                if (Math.Round(timeTotal) == 31)
@@ -290,13 +306,15 @@ namespace Animation_Summative
 
                 // Blasts
 
-                if (Math.Round(timeTotal) == 5)
+                if (Math.Round(timeTotal) == 5 && !greenBlast1)
                 {
                     greenBlast1 = true;
+                    TieBlast.Play();
                 }
-                else if ( Math.Round(timeTotal) == 9 )
+                else if ( Math.Round(timeTotal) == 9 && !redBlast)
                 {
                     redBlast = true;
+                    xWingBlast.Play();
                 }
                 else if (Math.Round(timeTotal) == 18 && !greenBlast1)
                 {
@@ -305,11 +323,14 @@ namespace Animation_Summative
                     greenBlastRect1.X = 393;
                     greenBlastRect1.Y = 175;
                     greenBlast1 = true;
+                    xWingBlast.Play();
+                    TieBlast.Play();
                 }
-                else if (Math.Round(timeTotal) == 26)
+                else if (Math.Round(timeTotal) == 26 && !redBlast)
                 {
                     redBlast = true;
                     redBlastRect.X = 495;
+                    xWingBlast.Play();
                 }
                 else if (Math.Round(timeTotal) == 27 && !greenBlast2)
                 {
@@ -319,6 +340,8 @@ namespace Animation_Summative
                     greenBlastRect2.Y = 200;
                     greenBlast1 = true;
                     greenBlast2 = true;
+                    TieBlast.Play();
+                    TieBlast.Play();
                 }
 
                 // Applying speeds
@@ -356,7 +379,7 @@ namespace Animation_Summative
             {
                 endingTextY -= 1;
 
-                if (endingTextY <= -450)
+                if (endingTextY <= -450 || mousestate.LeftButton == ButtonState.Pressed)
                 {
                     Exit();
                 }
@@ -383,6 +406,14 @@ namespace Animation_Summative
                 spriteBatch.DrawString(introFont, "His friends are in", new Vector2(205, introTextY + 450), Color.Yellow);
                 spriteBatch.DrawString(introFont, "grave danger on the", new Vector2(180, introTextY + 525), Color.Yellow);
                 spriteBatch.DrawString(introFont, "planet Bespin!", new Vector2(240, introTextY + 600), Color.Yellow);
+                spriteBatch.DrawString(introFont, "Without hesitation,", new Vector2(200, introTextY + 700), Color.Yellow);
+                spriteBatch.DrawString(introFont, "Luke jumps into his", new Vector2(185, introTextY + 775), Color.Yellow);
+                spriteBatch.DrawString(introFont, "X-wing, and blasts off", new Vector2(170, introTextY + 850), Color.Yellow);
+                spriteBatch.DrawString(introFont, "towards Bespin, but", new Vector2(180, introTextY + 925), Color.Yellow);
+                spriteBatch.DrawString(introFont, "but soon a patroling", new Vector2(180, introTextY + 1000), Color.Yellow);
+                spriteBatch.DrawString(introFont, "sqaudron of Tie-", new Vector2(200, introTextY + 1075), Color.Yellow);
+                spriteBatch.DrawString(introFont, "Fighters intercepts him", new Vector2(165, introTextY + 1150), Color.Yellow);
+                spriteBatch.DrawString(instructionFont, "(Click to skip)", new Vector2(670, 570), Color.Yellow);
 
             }
             else if (screen == Screen.Battle)
@@ -432,6 +463,7 @@ namespace Animation_Summative
                 spriteBatch.DrawString(endingFont, "to Bespin, in hopes to", new Vector2(180, endingTextY + 225), Color.Yellow);
                 spriteBatch.DrawString(endingFont, "save his friends,", new Vector2(240, endingTextY + 300), Color.Yellow);
                 spriteBatch.DrawString(endingFont, "before it is too late.", new Vector2(200, endingTextY + 375), Color.Yellow);
+                spriteBatch.DrawString(instructionFont, "(Click to Exit)", new Vector2(670, 570), Color.Yellow);
                 spriteBatch.Draw(lukeTexture, lukeRect, Color.White);
                 spriteBatch.Draw(vaderTexture, vaderRect, Color.White);
             }
