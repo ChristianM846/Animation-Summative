@@ -37,7 +37,9 @@ namespace Animation_Summative
         SpriteFont introFont;
         SpriteFont endingFont;
         SpriteFont instructionFont;
-        SoundEffect xWingBlast, TieBlast, TieExplosion; 
+        SoundEffect xWingBlast, TieBlast, TieExplosion;
+        SoundEffect introMusic, battleMusic, endingMusic;
+        SoundEffectInstance introMusicInstance, battleMusicInstance, endingMusicInstance;
         MouseState mousestate;
         float runTime;
         float timeTotal;
@@ -115,7 +117,12 @@ namespace Animation_Summative
             xWingBlast = Content.Load<SoundEffect>("X-WingBlast");
             TieBlast = Content.Load<SoundEffect>("TieBlast");
             TieExplosion = Content.Load<SoundEffect>("TieExplosion");
-
+            introMusic = Content.Load<SoundEffect>("Evil Star Wars Music");
+            introMusicInstance = introMusic.CreateInstance();
+            battleMusic = Content.Load<SoundEffect>("Star Wars Battle Music");
+            battleMusicInstance = battleMusic.CreateInstance();
+            endingMusic = Content.Load<SoundEffect>("Star Wars Yoda Theme");
+            endingMusicInstance = endingMusic.CreateInstance();
         }
 
         protected override void Update(GameTime gameTime)
@@ -129,8 +136,15 @@ namespace Animation_Summative
             if (screen == Screen.Intro)
             {
 
+                if (introMusicInstance.State == SoundState.Stopped)
+                {
+                    introMusicInstance.Play();
+                }
+
                 if (mousestate.LeftButton == ButtonState.Pressed || introTextY <= -1220)
                 {
+                    introMusicInstance.Stop();
+
                     introTime = runTime;
                     screen = Screen.Battle;
                 }
@@ -140,7 +154,10 @@ namespace Animation_Summative
             {
                 timeTotal = runTime - introTime;
 
-                
+                if (battleMusicInstance.State == SoundState.Stopped)
+                {
+                    battleMusicInstance.Play();
+                }
 
                 space1Rect.Y += (int)spaceSpeed.Y;
                 if (space1Rect.Top >= graphics.PreferredBackBufferHeight)
@@ -215,6 +232,7 @@ namespace Animation_Summative
 
                 if (xWingRect.Bottom <= -20)
                 {
+                    battleMusicInstance.Stop();
                     screen = Screen.End;
                 }
 
@@ -379,8 +397,14 @@ namespace Animation_Summative
             {
                 endingTextY -= 1;
 
-                if (endingTextY <= -450 || mousestate.LeftButton == ButtonState.Pressed)
+                if (endingMusicInstance.State == SoundState.Stopped)
                 {
+                    endingMusicInstance.Play();
+                }
+
+                if (endingTextY <= -650 || mousestate.LeftButton == ButtonState.Pressed)
+                {
+                    endingMusicInstance.Stop();
                     Exit();
                 }
             }
@@ -410,7 +434,7 @@ namespace Animation_Summative
                 spriteBatch.DrawString(introFont, "Luke jumps into his", new Vector2(185, introTextY + 775), Color.Yellow);
                 spriteBatch.DrawString(introFont, "X-wing, and blasts off", new Vector2(170, introTextY + 850), Color.Yellow);
                 spriteBatch.DrawString(introFont, "towards Bespin, but", new Vector2(180, introTextY + 925), Color.Yellow);
-                spriteBatch.DrawString(introFont, "but soon a patroling", new Vector2(180, introTextY + 1000), Color.Yellow);
+                spriteBatch.DrawString(introFont, "soon a patroling", new Vector2(200, introTextY + 1000), Color.Yellow);
                 spriteBatch.DrawString(introFont, "sqaudron of Tie-", new Vector2(200, introTextY + 1075), Color.Yellow);
                 spriteBatch.DrawString(introFont, "Fighters intercepts him", new Vector2(165, introTextY + 1150), Color.Yellow);
                 spriteBatch.DrawString(instructionFont, "(Click to skip)", new Vector2(670, 570), Color.Yellow);

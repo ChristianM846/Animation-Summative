@@ -20,6 +20,12 @@
 /processorParam:TextureFormat=Compressed
 /build:Ending.spritefont
 
+#begin Evil Star Wars Music.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Evil Star Wars Music.wav
+
 #begin Instruction.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -81,6 +87,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Space.png
+
+#begin Star Wars Battle Music.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Star Wars Battle Music.wav
+
+#begin Star Wars Yoda Theme.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Star Wars Yoda Theme.wav
 
 #begin Tie.png
 /importer:TextureImporter
